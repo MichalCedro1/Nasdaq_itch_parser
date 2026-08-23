@@ -1,0 +1,1 @@
+-debug "typical" -top "itch_parser_tb" -snapshot "parser_sim" 
