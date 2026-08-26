@@ -2,13 +2,13 @@
 # xsim v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Tue Aug 25 23:00:22 2026
-# Process ID: 15860
+# Start of session at: Wed Aug 26 23:09:42 2026
+# Process ID: 13354
 # Current directory: /home/student/mcedro/itch_parser
 # Command line: xsim -source {xsim.dir/parser_sim/xsim_script.tcl}
 # Log file: /home/student/mcedro/itch_parser/xsim.log
 # Journal file: /home/student/mcedro/itch_parser/xsim.jou
-# Running On: cadence36, OS: Linux, CPU Frequency: 3899.218 MHz, CPU Physical cores: 4, Host memory: 16720 MB
+# Running On: cadence36, OS: Linux, CPU Frequency: 3692.773 MHz, CPU Physical cores: 4, Host memory: 16720 MB
 #-----------------------------------------------------------
 start_gui
 source xsim.dir/parser_sim/xsim_script.tcl
@@ -18,11 +18,20 @@ add_wave {{/itch_parser_tb/rst_n}}
 current_wave_config {Untitled 1}
 add_wave {{/itch_parser_tb/s_axis_tdata}} 
 current_wave_config {Untitled 1}
-add_wave {{/itch_parser_tb/msg_data}} 
+add_wave {{/itch_parser_tb/s_axis_tvalid}} 
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/s_axis_tlast}} 
 current_wave_config {Untitled 1}
 add_wave {{/itch_parser_tb/msg_type}} 
 current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/msg_data}} 
+current_wave_config {Untitled 1}
 add_wave {{/itch_parser_tb/msg_valid}} 
-run all
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/msg_ticker}} 
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/msg_price}} 
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/order_valid}} 
 run all
 close_sim
