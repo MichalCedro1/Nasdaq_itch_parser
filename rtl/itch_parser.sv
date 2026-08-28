@@ -1,3 +1,5 @@
+import itch_pkg::*;
+
 module itch_parser (
     input logic clk,
     input logic rst_n,
@@ -11,8 +13,7 @@ module itch_parser (
     output logic [7:0] msg_data,
     output logic       msg_valid,
 
-    output logic [31:0] msg_ticker,
-    output logic [31:0] msg_price,
+    output itch_add_order_t parsed_order,
     output logic        order_valid
 );
 
@@ -30,14 +31,16 @@ module itch_parser (
     logic [15:0]        byte_cnt;
     logic [15:0]        msg_length;
     logic [15:0]        msg_count_left;
+    logic [287:0]       shift_buffer;
 
     always_ff @(posedge clk) begin
         if (!rst_n) begin
             msg_valid      <= 0;
             msg_type       <= 8'h00;
             msg_data       <= 8'h00;
-            msg_ticker     <= 32'h0;
-            msg_price     <= 32'h0;
+            order_valid    <= 0;
+            parsed_order   <= '0;
+            shift_buffer   <= '0;
             state          <= ST_IDLE;
             byte_cnt       <= 0;
             msg_length     <= 0;
@@ -84,26 +87,21 @@ module itch_parser (
                         msg_data  <= s_axis_tdata;
                         msg_valid <= 1'b1;
 
-                        state <=ST_PAYLOAD;
+                        shift_buffer <= {280'h0, s_axis_tdata};
+
+                        state <= ST_PAYLOAD;
                         byte_cnt <= 1;
                     end
 
                     ST_PAYLOAD: begin
                         msg_valid <= 1'b1;
                         msg_data  <= s_axis_tdata;
-                        
-                        if (msg_type == 8'h41) begin
-                            if (byte_cnt >= 1 && byte_cnt <= 4) begin
-                                msg_ticker <= {msg_ticker[23:0], s_axis_tdata};
-                            end
 
-                            if (byte_cnt >= 5 && byte_cnt <= 8) begin
-                                msg_price <= {msg_price[23:0], s_axis_tdata};
-                            end
-                        end
+                        shift_buffer <= {shift_buffer[279:0], s_axis_tdata};
 
                         if (byte_cnt == msg_length - 1 || s_axis_tlast) begin
                             if (msg_type == 8'h41) begin
+                                parsed_order <= {shift_buffer[279:0], s_axis_tdata};
                                 order_valid <= 1'b1;
                             end
                             if (msg_count_left > 1 && !s_axis_tlast) begin

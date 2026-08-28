@@ -1,3 +1,4 @@
+import itch_pkg::*;
 module itch_parser_tb;
 
     logic clk;
@@ -11,9 +12,10 @@ module itch_parser_tb;
     logic [7:0] msg_type;
     logic [7:0] msg_data;
     logic       msg_valid;
-    logic [31:0] msg_ticker;
-    logic [31:0] msg_price;
-    logic        order_valid;
+    
+    itch_add_order_t parsed_order;
+    logic            order_valid;
+
 
     itch_parser dut (
         .clk(clk),
@@ -25,9 +27,18 @@ module itch_parser_tb;
         .msg_type(msg_type),
         .msg_data(msg_data),
         .msg_valid(msg_valid),
-        .msg_ticker(msg_ticker),
-        .msg_price(msg_price),    
-        .order_valid(order_valid)
+        .parsed_order(parsed_order), 
+        .order_valid(order_valid)   
+    );
+
+
+    order_book ob_dut (
+        .clk(clk),
+        .rst_n(rst_n),
+        .parsed_order(parsed_order),
+        .order_valid(order_valid), 
+        
+        .best_bid_price(best_bid)  
     );
 
     initial clk = 0;
@@ -42,49 +53,97 @@ module itch_parser_tb;
         #20 rst_n = 1;
 
         #20;
-
+        
+        // ============================================
+        // 1. WYSYŁAMY NAGŁÓWEK MOLD_UDP64 (Tego brakowało!)
+        // ============================================
         $display("Wysylam naglowek MoldUDP64...");
         
+        // Wysyłamy pierwsze 18 bajtów (Session i SeqNum)
+        for (int i = 0; i < 18; i++) begin
+            @(posedge clk);          
+            s_axis_tvalid <= 1'b1;   // WŁĄCZAMY TRANSMISJĘ!
+            s_axis_tdata  <= 8'h00;  
+            s_axis_tlast  <= 1'b0;
+        end
+
+        // Wysyłamy bajty 18 i 19 (Message Count = 1 wiadomość w pakiecie)
+        @(posedge clk); s_axis_tdata <= 8'h00; 
+        @(posedge clk); s_axis_tdata <= 8'h01; 
+
+        // ============================================
+        // 1. NAGŁÓWEK (2 wiadomości w paczce)
+        // ============================================
+        $display("Wysylam naglowek MoldUDP64...");
         for (int i = 0; i < 18; i++) begin
             @(posedge clk);          
             s_axis_tvalid <= 1'b1;   
             s_axis_tdata  <= 8'h00;  
             s_axis_tlast  <= 1'b0;
         end
-
-        // ... (Nagłówek i Count zostają bez zmian)
-        // Wysyłamy bajty 18 i 19 (Message Count = 1 wiadomość)
         @(posedge clk); s_axis_tdata <= 8'h00; 
-        @(posedge clk); s_axis_tdata <= 8'h01; 
+        @(posedge clk); s_axis_tdata <= 8'h02; // MSG COUNT = 2
 
         // ============================================
-        // WIADOMOŚĆ: Typ 'A', długość 9 bajtów (1 typ + 4 ticker + 4 cena)
+        // 2. WIADOMOŚĆ 1: KUPNO ZA CENĘ 0x50
         // ============================================
-        $display("Wysylam Wiadomosc Add Order (AAPL)...");
-        @(posedge clk); s_axis_tdata <= 8'h00; // Długość: 9
-        @(posedge clk); s_axis_tdata <= 8'h09; 
-
+        $display("Wysylam Oferte 1 (Cena 50)...");
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h24; // Len: 36
         @(posedge clk); s_axis_tdata <= 8'h41; // Typ 'A'
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h01; // Locate
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h02; // Track
+        for(int i=0; i<6; i++) begin @(posedge clk); s_axis_tdata <= 8'hAA; end // Time
+        for(int i=0; i<8; i++) begin @(posedge clk); s_axis_tdata <= 8'hBB; end // Ref
         
-        // --- 4 BAJTY TICKERA (Szyld: AAPL) ---
-        @(posedge clk); s_axis_tdata <= 8'h41; // Litera 'A'
-        @(posedge clk); s_axis_tdata <= 8'h41; // Litera 'A'
-        @(posedge clk); s_axis_tdata <= 8'h50; // Litera 'P'
-        @(posedge clk); s_axis_tdata <= 8'h4c; // Litera 'L'
+        @(posedge clk); s_axis_tdata <= 8'h42; // BUY (Kupno)
+        for(int i=0; i<4; i++) begin @(posedge clk); s_axis_tdata <= 8'h00; end // Shares
+        
+        // Stock: AAPL
+        @(posedge clk); s_axis_tdata <= 8'h41; @(posedge clk); s_axis_tdata <= 8'h41; 
+        @(posedge clk); s_axis_tdata <= 8'h50; @(posedge clk); s_axis_tdata <= 8'h4C; 
+        @(posedge clk); s_axis_tdata <= 8'h20; @(posedge clk); s_axis_tdata <= 8'h20; 
+        @(posedge clk); s_axis_tdata <= 8'h20; @(posedge clk); s_axis_tdata <= 8'h20; 
+        
+        // CENA NR 1: 0x00000050
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h00;
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h50;
 
-        // --- 4 BAJTY CENY (Cokolwiek) ---
-        @(posedge clk); s_axis_tdata <= 8'hFF; 
-        @(posedge clk); s_axis_tdata <= 8'hEE; 
-        @(posedge clk); s_axis_tdata <= 8'hDD; 
+        // ============================================
+        // 3. WIADOMOŚĆ 2: KUPNO ZA CENĘ 0x99
+        // ============================================
+        $display("Wysylam Oferte 2 (Cena 99)...");
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h24; // Len: 36
+        @(posedge clk); s_axis_tdata <= 8'h41; // Typ 'A'
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h01; // Locate
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h02; // Track
+        for(int i=0; i<6; i++) begin @(posedge clk); s_axis_tdata <= 8'hAA; end // Time
+        for(int i=0; i<8; i++) begin @(posedge clk); s_axis_tdata <= 8'hBB; end // Ref
+        
+        @(posedge clk); s_axis_tdata <= 8'h42; // BUY (Kupno)
+        for(int i=0; i<4; i++) begin @(posedge clk); s_axis_tdata <= 8'h00; end // Shares
+        
+        // Stock: AAPL
+        @(posedge clk); s_axis_tdata <= 8'h41; @(posedge clk); s_axis_tdata <= 8'h41; 
+        @(posedge clk); s_axis_tdata <= 8'h50; @(posedge clk); s_axis_tdata <= 8'h4C; 
+        @(posedge clk); s_axis_tdata <= 8'h20; @(posedge clk); s_axis_tdata <= 8'h20; 
+        @(posedge clk); s_axis_tdata <= 8'h20; @(posedge clk); s_axis_tdata <= 8'h20; 
+        
+        // CENA NR 2: 0x00000099
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h00;
+        @(posedge clk); s_axis_tdata <= 8'h00; 
         @(posedge clk); 
-        s_axis_tdata <= 8'hCC; 
-        s_axis_tlast <= 1'b1;  // TLAST = 1 (Koniec)
+        s_axis_tdata <= 8'h99; 
+        s_axis_tlast <= 1'b1; // TLAST na samym końcu drugiej wiadomości!
 
-        // Zamykamy transmisję
+        // ============================================
+        // 4. ZAMKNIĘCIE TRANSMISJI
+        // ============================================
         @(posedge clk);
         s_axis_tvalid <= 1'b0;
         s_axis_tlast  <= 1'b0;
         s_axis_tdata  <= 8'h00;
+
+        #100 $finish;
 
         #100 $finish;
     end
