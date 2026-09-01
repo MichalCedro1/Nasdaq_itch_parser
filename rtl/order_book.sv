@@ -7,6 +7,9 @@ module order_book (
     input itch_add_order_t parsed_order,
     input logic            order_valid,
 
+    input itch_delete_order_t parsed_delete,
+    input logic               delete_valid,
+
     output logic [31:0] best_bid_price
 );
     always_ff @(posedge clk) begin
@@ -21,6 +24,10 @@ module order_book (
                         best_bid_price <= parsed_order.price;
                     end
                 end
+            end
+
+            if (delete_valid) begin
+                best_bid_price <= 32'h0;
             end
         end
     end

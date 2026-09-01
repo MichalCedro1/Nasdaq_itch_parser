@@ -8,7 +8,8 @@ Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
-Compiling package work.$unit_itch_parser_sv
+Compiling package work.itch_pkg
 Compiling module work.itch_parser
+Compiling module work.order_book
 Compiling module work.itch_parser_tb
 Built simulation snapshot parser_sim

@@ -2,13 +2,13 @@
 # xsim v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Fri Aug 28 17:17:37 2026
-# Process ID: 25866
+# Start of session at: Tue Sep  1 22:19:24 2026
+# Process ID: 4401
 # Current directory: /home/student/mcedro/itch_parser
 # Command line: xsim -source {xsim.dir/parser_sim/xsim_script.tcl}
 # Log file: /home/student/mcedro/itch_parser/xsim.log
 # Journal file: /home/student/mcedro/itch_parser/xsim.jou
-# Running On: cadence36, OS: Linux, CPU Frequency: 3688.671 MHz, CPU Physical cores: 4, Host memory: 16720 MB
+# Running On: cadence36, OS: Linux, CPU Frequency: 3293.945 MHz, CPU Physical cores: 4, Host memory: 16720 MB
 #-----------------------------------------------------------
 start_gui
 source xsim.dir/parser_sim/xsim_script.tcl
@@ -22,6 +22,14 @@ add_wave {{/itch_parser_tb/msg_data}}
 current_wave_config {Untitled 1}
 add_wave {{/itch_parser_tb/parsed_order}} 
 current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/parsed_delete}} 
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/best_bid}} 
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/delete_valid}} 
+current_wave_config {Untitled 1}
 add_wave {{/itch_parser_tb/order_valid}} 
+current_wave_config {Untitled 1}
+add_wave {{/itch_parser_tb/msg_valid}} 
 run all
 close_sim

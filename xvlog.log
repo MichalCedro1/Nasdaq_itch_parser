@@ -1,4 +1,7 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/itch_pkg.sv" into library work
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/itch_parser.sv" into library work
 INFO: [VRFC 10-311] analyzing module itch_parser
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/order_book.sv" into library work
+INFO: [VRFC 10-311] analyzing module order_book
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv" into library work
 INFO: [VRFC 10-311] analyzing module itch_parser_tb

@@ -16,6 +16,11 @@ module itch_parser_tb;
     itch_add_order_t parsed_order;
     logic            order_valid;
 
+    itch_delete_order_t parsed_delete;
+    logic               delete_valid;
+
+    logic [31:0]     best_bid;
+
 
     itch_parser dut (
         .clk(clk),
@@ -28,7 +33,9 @@ module itch_parser_tb;
         .msg_data(msg_data),
         .msg_valid(msg_valid),
         .parsed_order(parsed_order), 
-        .order_valid(order_valid)   
+        .order_valid(order_valid),
+        .parsed_delete(parsed_delete),
+        .delete_valid(delete_valid)
     );
 
 
@@ -37,6 +44,8 @@ module itch_parser_tb;
         .rst_n(rst_n),
         .parsed_order(parsed_order),
         .order_valid(order_valid), 
+        .parsed_delete(parsed_delete),
+        .delete_valid(delete_valid),
         
         .best_bid_price(best_bid)  
     );
@@ -53,23 +62,6 @@ module itch_parser_tb;
         #20 rst_n = 1;
 
         #20;
-        
-        // ============================================
-        // 1. WYSYŁAMY NAGŁÓWEK MOLD_UDP64 (Tego brakowało!)
-        // ============================================
-        $display("Wysylam naglowek MoldUDP64...");
-        
-        // Wysyłamy pierwsze 18 bajtów (Session i SeqNum)
-        for (int i = 0; i < 18; i++) begin
-            @(posedge clk);          
-            s_axis_tvalid <= 1'b1;   // WŁĄCZAMY TRANSMISJĘ!
-            s_axis_tdata  <= 8'h00;  
-            s_axis_tlast  <= 1'b0;
-        end
-
-        // Wysyłamy bajty 18 i 19 (Message Count = 1 wiadomość w pakiecie)
-        @(posedge clk); s_axis_tdata <= 8'h00; 
-        @(posedge clk); s_axis_tdata <= 8'h01; 
 
         // ============================================
         // 1. NAGŁÓWEK (2 wiadomości w paczce)
@@ -82,7 +74,7 @@ module itch_parser_tb;
             s_axis_tlast  <= 1'b0;
         end
         @(posedge clk); s_axis_tdata <= 8'h00; 
-        @(posedge clk); s_axis_tdata <= 8'h02; // MSG COUNT = 2
+        @(posedge clk); s_axis_tdata <= 8'h03; 
 
         // ============================================
         // 2. WIADOMOŚĆ 1: KUPNO ZA CENĘ 0x50
@@ -133,17 +125,37 @@ module itch_parser_tb;
         @(posedge clk); s_axis_tdata <= 8'h00; 
         @(posedge clk); 
         s_axis_tdata <= 8'h99; 
-        s_axis_tlast <= 1'b1; // TLAST na samym końcu drugiej wiadomości!
 
         // ============================================
-        // 4. ZAMKNIĘCIE TRANSMISJI
+        // 4. WIADOMOŚĆ 3: KASOWANIE ZAMÓWIENIA ('D') - 19 bajtów
+        // ============================================
+        $display("Wysylam Oferte Kasowania (D)...");
+        // Długość wiadomości: 19 bajtów (0x13 w systemie szesnastkowym)
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h13; 
+
+        // 1. Typ 'D'
+        @(posedge clk); s_axis_tdata <= 8'h44; 
+        
+        // 2. Stock Locate (2 bajty) & Tracking Number (2 bajty)
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h01; 
+        @(posedge clk); s_axis_tdata <= 8'h00; @(posedge clk); s_axis_tdata <= 8'h02; 
+        
+        // 3. Timestamp (6 bajtów)
+        for(int i=0; i<6; i++) begin @(posedge clk); s_axis_tdata <= 8'hAA; end 
+
+        // 4. Order Ref Num (8 bajtów) - tutaj dajemy TLAST na końcu paczki sieciowej!
+        for(int i=0; i<7; i++) begin @(posedge clk); s_axis_tdata <= 8'hBB; end 
+        @(posedge clk); 
+        s_axis_tdata <= 8'hBB; 
+        s_axis_tlast <= 1'b1; // TLAST KOŃCZY CAŁY RUCH SIECIOWY
+
+        // ============================================
+        // 5. ZAMKNIĘCIE TRANSMISJI
         // ============================================
         @(posedge clk);
         s_axis_tvalid <= 1'b0;
         s_axis_tlast  <= 1'b0;
         s_axis_tdata  <= 8'h00;
-
-        #100 $finish;
 
         #100 $finish;
     end

@@ -2,13 +2,13 @@
 # xsim v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Fri Aug 28 17:17:37 2026
-# Process ID: 25866
+# Start of session at: Tue Sep  1 22:19:24 2026
+# Process ID: 4401
 # Current directory: /home/student/mcedro/itch_parser
 # Command line: xsim -source {xsim.dir/parser_sim/xsim_script.tcl}
 # Log file: /home/student/mcedro/itch_parser/xsim.log
 # Journal file: /home/student/mcedro/itch_parser/xsim.jou
-# Running On: cadence36, OS: Linux, CPU Frequency: 3688.671 MHz, CPU Physical cores: 4, Host memory: 16720 MB
+# Running On: cadence36, OS: Linux, CPU Frequency: 3293.945 MHz, CPU Physical cores: 4, Host memory: 16720 MB
 #-----------------------------------------------------------
 start_gui
 source xsim.dir/parser_sim/xsim_script.tcl
@@ -92,12 +92,26 @@ Untitled 1
 add_wave {{/itch_parser_tb/parsed_order}} 
 current_wave_config {Untitled 1}
 Untitled 1
+add_wave {{/itch_parser_tb/parsed_delete}} 
+current_wave_config {Untitled 1}
+Untitled 1
+add_wave {{/itch_parser_tb/best_bid}} 
+current_wave_config {Untitled 1}
+Untitled 1
+add_wave {{/itch_parser_tb/delete_valid}} 
+current_wave_config {Untitled 1}
+Untitled 1
 add_wave {{/itch_parser_tb/order_valid}} 
+current_wave_config {Untitled 1}
+Untitled 1
+add_wave {{/itch_parser_tb/msg_valid}} 
 run all
 Wysylam naglowek MoldUDP64...
-Wysylam Prawdziwa Wiadomosc Add Order (36 bajtow)...
-$finish called at time : 725 ns : File "/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv" Line 116
+Wysylam Oferte 1 (Cena 50)...
+Wysylam Oferte 2 (Cena 99)...
+Wysylam Oferte Kasowania (D)...
+$finish called at time : 1315 ns : File "/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv" Line 160
 close_sim
 INFO: [Simtcl 6-16] Simulation closed
 exit
-INFO: [Common 17-206] Exiting xsim at Fri Aug 28 18:02:30 2026...
+INFO: [Common 17-206] Exiting xsim at Tue Sep  1 22:22:39 2026...

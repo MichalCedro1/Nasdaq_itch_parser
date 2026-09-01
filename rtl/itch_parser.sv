@@ -14,7 +14,9 @@ module itch_parser (
     output logic       msg_valid,
 
     output itch_add_order_t parsed_order,
-    output logic        order_valid
+    output logic            order_valid,
+    output itch_delete_order_t parsed_delete,
+    output logic               delete_valid
 );
 
     assign s_axis_tready = 1'b1; 
@@ -45,6 +47,8 @@ module itch_parser (
             byte_cnt       <= 0;
             msg_length     <= 0;
             msg_count_left <= 0;
+            parsed_delete  <= 0;
+            delete_valid   <= 0;
         end 
         else begin
             msg_valid    <= 1'b0;
@@ -103,6 +107,11 @@ module itch_parser (
                             if (msg_type == 8'h41) begin
                                 parsed_order <= {shift_buffer[279:0], s_axis_tdata};
                                 order_valid <= 1'b1;
+                            end
+
+                            if (msg_type == 8'h44) begin
+                                parsed_delete <= {shift_buffer[143:0], s_axis_tdata};
+                                delete_valid <= 1'b1;
                             end
                             if (msg_count_left > 1 && !s_axis_tlast) begin
                                 msg_count_left <= msg_count_left - 1;
