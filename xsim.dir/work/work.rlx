@@ -2,7 +2,7 @@
 2020.2
 Oct 19 2021
 02:56:52
-/home/student/mcedro/itch_parser/rtl/itch_parser.sv,1788292847,systemVerilog,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/rtl/order_book.sv,,itch_parser,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/itch_parser.sv,1788463784,systemVerilog,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/rtl/order_book.sv,,itch_parser,,,,,,,,
 /home/student/mcedro/itch_parser/rtl/itch_pkg.sv,1788292402,systemVerilog,/home/student/mcedro/itch_parser/rtl/itch_parser.sv;/home/student/mcedro/itch_parser/rtl/order_book.sv;/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/rtl/itch_parser.sv,,$unit_itch_pkg_sv;itch_pkg,,,,,,,,
-/home/student/mcedro/itch_parser/rtl/order_book.sv,1787932567,systemVerilog,,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,,order_book,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/order_book.sv,1788382235,systemVerilog,,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,,order_book,,,,,,,,
 /home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,1788291874,systemVerilog,,,,itch_parser_tb,,,,,,,,

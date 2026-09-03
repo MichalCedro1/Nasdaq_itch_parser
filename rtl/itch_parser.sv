@@ -51,8 +51,9 @@ module itch_parser (
             delete_valid   <= 0;
         end 
         else begin
-            msg_valid    <= 1'b0;
-            order_valid <= 1'b0;
+            msg_valid      <= 1'b0;
+            order_valid    <= 1'b0;
+            delete_valid   <= 0;
 
             if (s_axis_tvalid) begin
                 case (state)

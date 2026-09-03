@@ -20,6 +20,7 @@ module itch_parser_tb;
     logic               delete_valid;
 
     logic [31:0]     best_bid;
+    logic [31:0]     best_bid_vol;
 
 
     itch_parser dut (
@@ -46,8 +47,8 @@ module itch_parser_tb;
         .order_valid(order_valid), 
         .parsed_delete(parsed_delete),
         .delete_valid(delete_valid),
-        
-        .best_bid_price(best_bid)  
+        .best_bid_price(best_bid),
+        .best_bid_volume(best_bid_vol)
     );
 
     initial clk = 0;
@@ -88,7 +89,8 @@ module itch_parser_tb;
         for(int i=0; i<8; i++) begin @(posedge clk); s_axis_tdata <= 8'hBB; end // Ref
         
         @(posedge clk); s_axis_tdata <= 8'h42; // BUY (Kupno)
-        for(int i=0; i<4; i++) begin @(posedge clk); s_axis_tdata <= 8'h00; end // Shares
+        for(int i=0; i<3; i++) begin @(posedge clk); s_axis_tdata <= 8'h00; end
+        @(posedge clk); s_axis_tdata <= 8'h64;
         
         // Stock: AAPL
         @(posedge clk); s_axis_tdata <= 8'h41; @(posedge clk); s_axis_tdata <= 8'h41; 
@@ -112,7 +114,8 @@ module itch_parser_tb;
         for(int i=0; i<8; i++) begin @(posedge clk); s_axis_tdata <= 8'hBB; end // Ref
         
         @(posedge clk); s_axis_tdata <= 8'h42; // BUY (Kupno)
-        for(int i=0; i<4; i++) begin @(posedge clk); s_axis_tdata <= 8'h00; end // Shares
+        for(int i=0; i<3; i++) begin @(posedge clk); s_axis_tdata <= 8'h00; end
+        @(posedge clk); s_axis_tdata <= 8'h64;
         
         // Stock: AAPL
         @(posedge clk); s_axis_tdata <= 8'h41; @(posedge clk); s_axis_tdata <= 8'h41; 
