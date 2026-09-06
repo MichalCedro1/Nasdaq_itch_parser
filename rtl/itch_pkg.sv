@@ -19,4 +19,16 @@ package itch_pkg;
         logic [63:0]  order_ref_num;                  
     } itch_delete_order_t;
 
+    typedef enum logic [1:0] {
+        EVT_NONE   = 2'b00,
+        EVT_ADD    = 2'b01,
+        EVT_DELETE = 2'b10
+    } evt_type_t;
+
+    typedef struct packed {
+        evt_type_t          evt_type;
+        itch_add_order_t    order_data;
+        itch_delete_order_t delete_data;
+    } order_event_t;
+
 endpackage

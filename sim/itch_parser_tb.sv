@@ -33,13 +33,10 @@ module itch_parser_tb;
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // TABLICA NA DANE Z PLIKU (Może pomieścić 1024 bajty)
     logic [7:0] memory [0:1023]; 
 
     initial begin
-        // 1. WCZYTANIE DANYCH Z PLIKU DO PAMIĘCI
-        // UWAGA: Upewnij się, że podajesz pełną ścieżkę do pliku, np. "/home/student/mcedro/itch_parser/market_data.hex"
-        // Jeśli Vivado zgłosi błąd, że nie widzi pliku, podmień "market_data.hex" na absolutną ścieżkę!
+        // PAMIETAJ: Zmień na pełną ścieżkę (np. "/home/student/mcedro/itch_parser/market_data.hex") jeśli to konieczne
         $readmemh("market_data.hex", memory);
 
         rst_n = 0;
@@ -50,39 +47,29 @@ module itch_parser_tb;
         #20 rst_n = 1;
         #20;
 
-        $display("Rozpoczynam wstrzykiwanie danych z pliku...");
+        $display("Rozpoczynam wstrzykiwanie danych z pelna predkoscia (BEZ OPOZNIEN!)...");
 
-        // 2. AUTOMATYCZNE POMPOWANIE DANYCH DO PARSERA
+        // Czysta, bezlitosna petla - pompujemy dane z predkoscia swiatla
         for (int i = 0; i < 1024; i++) begin
             if (memory[i] === 8'hxx) break; 
-            
-            // NOWOŚĆ: Reakcja na nasz Magiczny Znacznik
-            if (memory[i] === 8'hFF) begin
-                @(posedge clk);
-                s_axis_tvalid <= 1'b0; // Zakręcamy kran z danymi
-                s_axis_tlast  <= 1'b0;
-                #1000;                 // Czekamy 1000ns aż Księgowy znajdzie 50$!
-                continue;              // Przeskakujemy bajt 'FF' i jedziemy dalej
-            end
             
             @(posedge clk);          
             s_axis_tvalid <= 1'b1;   
             s_axis_tdata  <= memory[i];  
             
-            // TLAST musi pójść w górę przed pustym polem ATAKŻE przed przerwą 'FF'
-            if (memory[i+1] === 8'hxx || memory[i+1] === 8'hFF) begin
+            if (memory[i+1] === 8'hxx) begin
                 s_axis_tlast <= 1'b1;
             end else begin
                 s_axis_tlast <= 1'b0;
             end
         end
 
-        // Zamykamy rurę z danymi
+        // Zamykamy rure z danymi
         @(posedge clk);
         s_axis_tvalid <= 1'b0;
         s_axis_tlast  <= 1'b0;
 
-        // Dajemy Księgowemu i Mózgowi czas na szukanie cen, kupno i sprzedaż
+        // Dajemy ukladom w FIFO i Ksiegowemu czas na rozladowanie kolejki
         #2000 $finish;
     end
 

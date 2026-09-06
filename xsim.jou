@@ -2,13 +2,13 @@
 # xsim v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Fri Sep  4 22:33:44 2026
-# Process ID: 4001
+# Start of session at: Sun Sep  6 23:13:49 2026
+# Process ID: 12165
 # Current directory: /home/student/mcedro/itch_parser
 # Command line: xsim -source {xsim.dir/parser_sim/xsim_script.tcl}
 # Log file: /home/student/mcedro/itch_parser/xsim.log
 # Journal file: /home/student/mcedro/itch_parser/xsim.jou
-# Running On: cadence36, OS: Linux, CPU Frequency: 3681.835 MHz, CPU Physical cores: 4, Host memory: 16720 MB
+# Running On: cadence36, OS: Linux, CPU Frequency: 3880.859 MHz, CPU Physical cores: 4, Host memory: 16720 MB
 #-----------------------------------------------------------
 start_gui
 source xsim.dir/parser_sim/xsim_script.tcl

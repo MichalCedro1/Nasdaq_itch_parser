@@ -45,13 +45,49 @@ module hft_top (
         .delete_valid(delete_valid)
     );
 
+    order_event_t fifo_din;
+    logic         fifo_wren;
+
+    always_comb begin
+        fifo_din.order_data   = parsed_order;
+        fifo_din.delete_data  = parsed_delete;
+        if (order_valid) begin
+            fifo_din.evt_type = EVT_ADD;
+            fifo_wren         = 1'b1;
+        end else if (delete_valid) begin
+            fifo_din.evt_type = EVT_DELETE;
+            fifo_wren         = 1'b1;
+        end else begin
+            fifo_din.evt_type = EVT_NONE;
+            fifo_wren         = 1'b0;
+        end
+    end
+
+    order_event_t fifo_dout;
+    logic         fifo_empty;
+    logic         fifo_full;
+    logic         fifo_rden;
+
+    fifo_buffer #(
+        .DEPTH(16),
+        .PTR_W(4)
+    ) u_fifo (
+        .clk(clk),
+        .rst_n(rst_n),
+        .wr_en(fifo_wren),
+        .din(fifo_din),
+        .full(fifo_full),
+        .rd_en(fifo_rden),
+        .dout(fifo_dout),
+        .empty(fifo_empty)
+    );
+
     order_book u_order_book (
         .clk(clk),
         .rst_n(rst_n),
-        .parsed_order(parsed_order),
-        .order_valid(order_valid),
-        .parsed_delete(parsed_delete),
-        .delete_valid(delete_valid),
+        .fifo_dout(fifo_dout),
+        .fifo_empty(fifo_empty),
+        .fifo_rd_en(fifo_rden),
         .best_bid_price(best_bid_price),
         .best_bid_volume(best_bid_vol),
         .panic_volume(panic_volume)

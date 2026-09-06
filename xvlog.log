@@ -1,12 +1,13 @@
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/hft_top.sv" into library work
-INFO: [VRFC 10-311] analyzing module hft_top
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/itch_pkg.sv" into library work
-WARNING: [VRFC 10-3264] design element 'itch_pkg' is previously defined, ignoring this definition [/home/student/mcedro/itch_parser/rtl/itch_pkg.sv:1]
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/itch_parser.sv" into library work
 INFO: [VRFC 10-311] analyzing module itch_parser
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/order_book.sv" into library work
 INFO: [VRFC 10-311] analyzing module order_book
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/strategy_engine.sv" into library work
 INFO: [VRFC 10-311] analyzing module strategy_engine
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/fifo_buffer.sv" into library work
+INFO: [VRFC 10-311] analyzing module fifo_buffer
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/rtl/hft_top.sv" into library work
+INFO: [VRFC 10-311] analyzing module hft_top
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv" into library work
 INFO: [VRFC 10-311] analyzing module itch_parser_tb

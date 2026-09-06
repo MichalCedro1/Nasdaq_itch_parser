@@ -2,9 +2,10 @@
 2020.2
 Oct 19 2021
 02:56:52
-/home/student/mcedro/itch_parser/rtl/hft_top.sv,1788553485,systemVerilog,/home/student/mcedro/itch_parser/rtl/itch_parser.sv;/home/student/mcedro/itch_parser/rtl/order_book.sv;/home/student/mcedro/itch_parser/rtl/strategy_engine.sv;/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/rtl/itch_pkg.sv,,$unit_hft_top_sv;hft_top,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/fifo_buffer.sv,1788719119,systemVerilog,,/home/student/mcedro/itch_parser/rtl/hft_top.sv,,fifo_buffer,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/hft_top.sv,1788728625,systemVerilog,/home/student/mcedro/itch_parser/rtl/itch_parser.sv;/home/student/mcedro/itch_parser/rtl/order_book.sv;/home/student/mcedro/itch_parser/rtl/strategy_engine.sv;/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,,hft_top,,,,,,,,
 /home/student/mcedro/itch_parser/rtl/itch_parser.sv,1788463784,systemVerilog,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/rtl/order_book.sv,,itch_parser,,,,,,,,
-/home/student/mcedro/itch_parser/rtl/itch_pkg.sv,1788292402,systemVerilog,/home/student/mcedro/itch_parser/rtl/hft_top.sv,/home/student/mcedro/itch_parser/rtl/itch_parser.sv,,itch_pkg,,,,,,,,
-/home/student/mcedro/itch_parser/rtl/order_book.sv,1788546143,systemVerilog,,/home/student/mcedro/itch_parser/rtl/strategy_engine.sv,,order_book,,,,,,,,
-/home/student/mcedro/itch_parser/rtl/strategy_engine.sv,1788553415,systemVerilog,,/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,,strategy_engine,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/itch_pkg.sv,1788713873,systemVerilog,/home/student/mcedro/itch_parser/rtl/fifo_buffer.sv;/home/student/mcedro/itch_parser/rtl/hft_top.sv;/home/student/mcedro/itch_parser/rtl/itch_parser.sv;/home/student/mcedro/itch_parser/rtl/order_book.sv;/home/student/mcedro/itch_parser/rtl/strategy_engine.sv;/home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,/home/student/mcedro/itch_parser/rtl/itch_parser.sv,,$unit_itch_pkg_sv;itch_pkg,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/order_book.sv,1788728776,systemVerilog,,/home/student/mcedro/itch_parser/rtl/strategy_engine.sv,,order_book,,,,,,,,
+/home/student/mcedro/itch_parser/rtl/strategy_engine.sv,1788553415,systemVerilog,,/home/student/mcedro/itch_parser/rtl/fifo_buffer.sv,,strategy_engine,,,,,,,,
 /home/student/mcedro/itch_parser/sim/itch_parser_tb.sv,1788552713,systemVerilog,,,,itch_parser_tb,,,,,,,,
